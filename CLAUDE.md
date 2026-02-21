@@ -109,3 +109,41 @@ Type-specific decoders invoked by the message formatter for custom Apple log obj
 ### Oversize String Handling
 
 A key complexity: some log entries reference oversize strings stored in different tracev3 files. The example binary demonstrates the pattern — accumulate oversize entries across files, then re-process any entries that had missing data in a second pass.
+
+---
+
+## Working with Claude
+
+### Claude Code Integration
+This repository is configured to work with [Claude Code](https://claude.ai/code). The instructions in this file help Claude understand the project structure, conventions, and how to work effectively within this codebase.
+
+### Key Principles for AI Assistance
+- Always run `cargo clippy` and `cargo fmt` after making changes
+- Never skip or delete tests to make the suite pass
+- Prefer fixing root causes over patching symptoms
+- Keep changes minimal and focused — avoid unrelated refactors
+- When in doubt about behavior, check existing tests for examples
+
+### Common Tasks
+
+**Adding a new decoder:**
+1. Create `src/decoders/<name>.rs`
+2. Implement the decode function
+3. Register it in `src/decoders/config.rs`
+4. Add tests
+
+**Adding support for a new log chunk type:**
+1. Add a new file in `src/chunks/`
+2. Implement parsing logic
+3. Wire it into `src/unified_log.rs`
+4. Add test fixtures and tests
+
+**Debugging a test failure:**
+1. Run the specific test: `cargo test --release <test_name> -- --nocapture`
+2. Check the test fixture under `tests/test_data/`
+3. Trace the parsing pipeline from the relevant chunk type
+
+### Environment Setup
+- Rust stable toolchain required
+- Test data must be downloaded before running tests (see Build & Test Commands above)
+- `cargo-deny` required for license checks: `cargo install cargo-deny`
